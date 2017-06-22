@@ -3,21 +3,19 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 template <typename Key, typename Data, typename KeyComparator>
 class DAL{
 
 	protected:
-		using Key = int;
-		using Data = std::string;
-
 		struct NodeAL{
 			Key id;
 			Data info;
 		};
 
 		static const int SIZE = 50;
-		int mi_Lenght;
+		int mi_Length;
 		int mi_Capacity;
 		NodeAL *mpt_Data;
 
@@ -27,7 +25,7 @@ class DAL{
 		/// [I] SPECIAL MEMBERS
 		DAL(int _MaxSz = SIZE);
 		virtual ~DAL(){
-			delete [] mpt_data;
+			delete [] mpt_Data;
 		};
 
 		/// [II] FUNCTIONS
@@ -39,8 +37,7 @@ class DAL{
 		bool sucessor(const Key & _x, Key & _y) const;
 		bool predecessor(const Key & _x, Key & _y) const;
 
-		inline friend
-		std::ostream &operator<<(std::ostream _os, const DAL& _oList){
+		inline friend std::ostream &operator<<(std::ostream & _os, const DAL& _oList){
 			_os << "[ ";
 			for(int i(0); i < _oList.mi_Lenght; i++){
 				_os << "{id: " << _oList.mpt_Data[i].id << ", info: "

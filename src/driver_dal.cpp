@@ -1,11 +1,12 @@
 #include <iostream>
+#include "../include/dal.h"
 
 class MyKeyComparator{
 	public:
 		bool operator()(const int &lhs, const int &rhs) const{
 			return lhs < rhs;
 		}
-}
+};
 
 int main(){
 
