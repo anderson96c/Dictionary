@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <algorithm>
 #include <stdexcept>
 
 template <typename Key, typename Data, typename KeyComparator>
@@ -39,7 +41,7 @@ class DAL{
 
 		inline friend std::ostream &operator<<(std::ostream & _os, const DAL& _oList){
 			_os << "[ ";
-			for(int i(0); i < _oList.mi_Lenght; i++){
+			for(int i(0); i < _oList.mi_Length; i++){
 				_os << "{id: " << _oList.mpt_Data[i].id << ", info: "
 					<< _oList.mpt_Data[i].info << "} ";
 			}

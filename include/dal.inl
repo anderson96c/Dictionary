@@ -18,19 +18,17 @@ int DAL<Key, Data, KeyComparator>::_search(const Key & _z) const
 
 	KeyComparator cmp;
 	Key k;
-	int i;
 
-	for(i = 0; i < mi_Length ; i++)
+	for(auto i = 0; i < mi_Length ; i++)
 	{
-
 		k = mpt_Data[i].id;
 
-		if(not cpm(k,_z) and not cpm(k,_z)){
+		if(not cmp(k,_z) and not cmp(_z,k))
+		{
 			return i;
 		}
 	}
-
-	return i;
+	return -1;
 
 }
 
@@ -44,19 +42,22 @@ bool DAL<Key, Data, KeyComparator>::remove(const Key & _x, Data & _s)
 
 	auto ads = _search(_x);
 	//Checkes if it's in the Dict
-	if(ads != mi_Length)
+	if(ads == (mi_Length-1))
 	{
 		_s = mpt_Data[ads].info;
-		if(not ads == (mi_Length-1))
-			std::copy( &mpt_Data[ads+1], &mpt_Data[mi_Length+1], &mpt_Data[ads] );
+		mi_Length--;
+		return true;
+	}
+	else if(ads != -1)
+	{
+		_s = mpt_Data[ads].info;		
+		std::copy( &mpt_Data[ads+1], &mpt_Data[mi_Length+1], &mpt_Data[ads]);
 		mi_Length--;
 
 		return true;
-
 	}
 	//It's not in the Dict
-	else
-		return false;
+	return false;
 
 }
 
@@ -66,7 +67,7 @@ bool DAL<Key, Data, KeyComparator>::search(const Key & _x, Data & _s) const
 
 	auto ads = _search(_x);
 	//Checkes if it's in the Dict
-	if(ads != mi_Length)
+	if(ads != -1)
 	{
 		_s = mpt_Data[ads].info;
 		return true;
@@ -75,26 +76,20 @@ bool DAL<Key, Data, KeyComparator>::search(const Key & _x, Data & _s) const
 	else
 		return false;
 
+
 }
 
 template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::insert(const Key & _newKey, const Data & _newInfo)
 {
-	if(mi_Length < mi_Capacity)
-	{
-		//Checks if it's already in the list and get the address
-		auto ads = _search(_newKey);
+	if(mi_Length == mi_Capacity)
+		return false;
 
-		mpt_Data[ads].id = _newKey;
-		mpt_Data[ads].info = _newInfo;
-		if(ads == mi_Length)
-			mi_Length++;
+		mpt_Data[mi_Length].id = _newKey;
+		mpt_Data[mi_Length].info = _newInfo;
+		mi_Length++;
 
 		return true;
-	}
-
-	else
-		return false;
 }
 
 template <typename Key, typename Data, typename KeyComparator>
@@ -104,13 +99,11 @@ Key DAL<Key, Data, KeyComparator>::min() const
 		throw std::out_of_range("[min()]: Can not recover an element from an empty Dictionary");
 
 	KeyComparator cmp;
-	Key min;
+	Key min = mpt_Data[0].id;
 
-	for(auto i(0); i!=mi_Length-1; i++){
-		if(cmp(mpt_Data[i].id,mpt_Data[i+1].id))
+	for(auto i(1); i!=mi_Length; i++){
+		if(cmp(mpt_Data[i].id, min))
 			min = mpt_Data[i].id;
-		else
-			min = mpt_Data[i+1].id;
 	}
 	return min;
 
@@ -125,12 +118,11 @@ Key DAL<Key, Data, KeyComparator>::max() const
 
 
 	KeyComparator cmp;
-	Key max;
+	Key max = mpt_Data[0].id;
 
-	for(auto i(0); i!=mi_Length-1; i++){
-		if(cmp(mpt_Data[i].id,mpt_Data[i+1].id))
-			max = mpt_Data[i+1].id;
-		else
+
+	for(auto i(1); i<mi_Length; i++){
+		if(cmp(max, mpt_Data[i].id))
 			max = mpt_Data[i].id;
 	}
 	return max;
@@ -144,7 +136,7 @@ bool DAL<Key, Data, KeyComparator>::sucessor(const Key & _x, Key & _y) const
 	if(mi_Length == 0)
 		return false;
 	//The key _x is not in the Dict
-	if(_search(_x) == mi_Length)
+	if(_search(_x) == -1)
 		return false;
 
 	KeyComparator cmp;
@@ -153,7 +145,7 @@ bool DAL<Key, Data, KeyComparator>::sucessor(const Key & _x, Key & _y) const
 
 	for(auto i(0); i<mi_Length; i++)
 	{
-		if(cmp(_x, mpt_Data[i].id) and cpm(mpt_Data[i].id, sucessor))
+		if(cmp(_x, mpt_Data[i].id) and cmp(mpt_Data[i].id, sucessor))
 			sucessor = mpt_Data[i].id;
 	}
 
@@ -170,7 +162,7 @@ bool DAL<Key, Data, KeyComparator>::predecessor(const Key & _x, Key & _y) const
 	if(mi_Length == 0)
 		return false;
 	//The key _x is not in the Dict
-	if(_search(_x) == mi_Length)
+	if(_search(_x) == -1)
 		return false;
 
 	KeyComparator cmp;
@@ -179,7 +171,7 @@ bool DAL<Key, Data, KeyComparator>::predecessor(const Key & _x, Key & _y) const
 
 	for(auto i(0); i<mi_Length; i++)
 	{
-		if(cmp(mpt_Data[i].id, _x) and cpm( predecessor, mpt_Data[i].id))
+		if(cmp(mpt_Data[i].id, _x) and cmp( predecessor, mpt_Data[i].id))
 			predecessor = mpt_Data[i].id;
 	}
 
@@ -214,7 +206,7 @@ int DSAL<Key, Data, KeyComparator>::_search(const Key & _x) const
 			left = middle+1;
 	}
 
-	return Length_;
+	return -1;
 
 }
 
@@ -231,7 +223,7 @@ bool DSAL<Key, Data, KeyComparator>::insert(const Key & _newKey, const Data & _n
 	if(Length_ == Capacity_)
 		return false;
 	//The key is already in the Dict
-	if(check != Length_)
+	if(check != -1)
 		return false;
 
 	KeyComparator cmp;
