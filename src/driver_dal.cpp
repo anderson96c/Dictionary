@@ -67,9 +67,8 @@ int main(){
 		int pred, suce;
 		assert(myList.predecessor(681617, pred));
 		assert(myList.sucessor(681617, suce));
-		std::cout << pred << " " << suce << std::endl;
-		//assert(pred == 1);
-		//assert(suce == 879853);
+		assert(pred == 554988);
+		assert(suce == 879853);
 		std::cout << ">> Passed!\n";
 
 	}

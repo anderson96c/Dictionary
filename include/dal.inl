@@ -188,18 +188,18 @@ template <typename Key, typename Data, typename KeyComparator>
 int DSAL<Key, Data, KeyComparator>::_search(const Key & _x) const
 {
 	auto Length_ = DAL<Key, Data, KeyComparator>::mi_Length;
-	auto left = 0 , right = Length_-1;
+	int left = 0 , right = Length_-1;
 
 	KeyComparator cmp;
 
 	while(left <= right)
 	{
-		int middle = (left-right)/2;
+		int middle = (left+right)/2;
 
 		auto result = DAL<Key, Data, KeyComparator>::mpt_Data[middle].id;
 
 		if(not cmp(_x,result) and not cmp(result, _x))
-			return middle;
+		{	return middle;}
 		else if (cmp(_x, result))
 			right = middle -1;
 		else 
@@ -207,6 +207,7 @@ int DSAL<Key, Data, KeyComparator>::_search(const Key & _x) const
 	}
 
 	return -1;
+
 
 }
 
@@ -276,6 +277,10 @@ bool DSAL<Key, Data, KeyComparator>::insert(const Key & _newKey, const Data & _n
 		return true;
 	}
 
+	
+
+	return false;
+
 
 
 
@@ -292,12 +297,17 @@ bool DSAL<Key, Data, KeyComparator>::remove(const Key & _x, Data & _s)
 		return false;
 
 	auto ads = _search(_x);
-	//Not in the Dict
-	if(ads != Length_)
+
+	if(ads == (Length_-1))
 	{
 		_s = Data_[ads].info;
-	if(not ads == (Length_-1))
-			std::copy( &Data_[ads+1], &Data_[Length_+1], &Data_[ads] );
+		Length_--;
+	}
+	//Not in the Dict
+	else if(ads != -1)
+	{
+		_s = Data_[ads].info;
+		std::copy( &Data_[ads+1], &Data_[Length_+1], &Data_[ads] );
 		Length_--;
 	}
 
