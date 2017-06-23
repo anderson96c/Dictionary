@@ -13,126 +13,120 @@ class MyKeyComparator{
 int main(){
 	
 	{
-		/// [I] DAL'S TESTS
-		std::cout << "      ======================================== DAL ========================================\n";
+		std::cout << "##################################### >>DAL TEST<< #####################################\n\n";
 		DAL<int, std::string, MyKeyComparator> myList(50);
-		std::string name_1, name_2, name_3, name_4;
+		std::string name1, name2;
 
-		/// Testing Insert
-		std::cout << "Insert:\n>>> Inserting...\n";
-		myList.insert(156988, "Rayan");
-		myList.insert(1, "Mario");
-		myList.insert(365191, "Kratos");
-		myList.insert(497493, "Leon");
-		myList.insert(121684, "Dante");
-		myList.insert(681617, "CJ");
-		myList.insert(2, "Luigi");
-		myList.insert(984613, "Niko");
-		myList.insert(554988, "Wander");
-		myList.insert(879853, "Mega Man");
+		// Testing Insert
+		std::cout << "Testing Insert():\n";
+		myList.insert(23,"Ahri");
+		myList.insert(1, "Mordekaizer");
+		myList.insert(645, "Aloi");
+		myList.insert(147, "Ezio");
+		myList.insert(9999999, "Leroy Jenkins");
 
-		std::cout << ">> Passed!\n";
-		std::cout << myList << std::endl;		//!< Operator
+
+		std::cout << myList << std::endl;		// Operator <<
+		std::cout << ">> Insert() works\n";
 		
-		std::cout << std::endl;
-		/// Testing Remove
-		name_1 = "Dante";
-		name_2 = "Leon";
-		std::cout << ">>> Remove: " << name_1 << " and " << name_2 << ".\n>>> Removing...\n";
-		myList.remove(121684, name_1);
-		myList.remove(497493, name_2);
-		std::cout << ">> Passed!\n";
-		std::cout << myList << std::endl;
+		// Testing Remove
+		myList.remove(645, name1);
+		myList.remove(147, name2);
+		std::cout << "Removed: " << name1 << " and " << name2 << ".\n";
+		assert(name1 == "Aloi");
+		assert(name2 == "Ezio");
+		std::cout << "Passed!\n";
+		std::cout << myList << "\n";
 		
-		std::cout << std::endl;
-		/// Testing Search
-		name_3 = "CJ";
-		name_4 = "Wander";
-		std::cout << ">>> Search: " << name_3 << ", " << name_4 << " and " << name_1 << " (Was removed).\n>>> Searching...\n";
-		assert(myList.search(681617, name_3));
-		assert(myList.search(554988, name_4));
-		assert(myList.search(121684, name_1) == false);	//!< Was removed
-		std::cout << ">> Passed!\n";
+		// Testing Search
+		std::cout << "Searching for key '1'...\n";
+		assert(myList.search(1, name1));
+		std::cout << "Recovered from search: " << name1 << "\n";
+		assert(myList.search(147, name2) == false);	//Removed
+		std::cout << "Passed!\n";
 
 		std::cout << std::endl;
 		/// Testing Min and Max
-		std::cout << ">>> Max and Min:\n>>> Searching...\n";
-		assert(myList.min() == 1);
-		assert(myList.max() == 984613);
-		std::cout << ">> Passed!\n";
+		std::cout << "Testing max() and min():\n";
+		myList.search(myList.min(), name1);
+		myList.search(myList.max(), name2);
+		std::cout << "Info in min(): " << name1 << " Info in max(): " << name2 << "\n";
+		assert(name1 == "Mordekaizer");
+		assert(name2 == "Leroy Jenkins");
+		std::cout << "Passed!\n";
 
 		std::cout << std::endl;
 		/// Testing Predecessor and Sucessor
-		std::cout << "Predecessor and Sucessor: " << name_3 << ".\n>>> Searching...\n";
-		int pred, suce;
-		assert(myList.predecessor(681617, pred));
-		assert(myList.sucessor(681617, suce));
-		assert(pred == 554988);
-		assert(suce == 879853);
-		std::cout << ">> Passed!\n";
+		std::cout << "Testing Predecessor and Sucessor of key '23': \n";
+		int prd, scs;
+		assert(myList.predecessor(23, prd));
+		assert(myList.sucessor(23, scs));
+		std::cout << "Predecessor: " << prd << "\n";
+		std::cout << "Sucessor: " << scs << "\n";
+		assert(prd == 1);
+		assert(scs == 9999999);
+		std::cout << "Passed!\n";
+
+		std::cout << "\n\n\n";
 
 	}
 	
 	{
-		/// [II] DSAL'S TESTS
-		std::cout << "      ======================================= DSAL ========================================\n";
-		DSAL<int, std::string, MyKeyComparator> myList(50);	
-		std::string name_1, name_2, name_3, name_4;
+		std::cout << "##################################### >>DSAL TEST<< #####################################\n\n";
+		DSAL<int, std::string, MyKeyComparator> myList(50);
+		std::string name1, name2;
 
-		/// Testing Insert
-		std::cout << "Insert:\n>>> Inserting...\n";
-		myList.insert(156988, "Rayan");
-		myList.insert(1, "Mario");
-		myList.insert(365191, "Kratos");
-		myList.insert(497493, "Leon");
-		myList.insert(121684, "Dante");
-		myList.insert(681617, "CJ");
-		myList.insert(2, "Luigi");
-		myList.insert(984613, "Niko");
-		myList.insert(554988, "Wander");
-		myList.insert(879853, "Mega Man");
+		// Testing Insert
+		std::cout << "Testing Insert():\n";
+		myList.insert(23,"Ahri");
+		myList.insert(1, "Mordekaizer");
+		myList.insert(645, "Aloi");
+		myList.insert(147, "Ezio");
+		myList.insert(9999999, "Leroy Jenkins");
 
-		std::cout << ">> Passed!\n";
-		std::cout << myList << std::endl;		//!< Operator
 
-		std::cout << std::endl;
-		/// Testing Remove
-		name_1 = "Dante";
-		name_2 = "Leon";
-		std::cout << ">>> Remove: " << name_1 << " and " << name_2 << ".\n>>> Removing...\n";
-		myList.remove(121684, name_1);
-		myList.remove(497493, name_2);
-		std::cout << ">> Passed!\n";
-		std::cout << myList << std::endl;
+		std::cout << myList << std::endl;		// Operator <<
+		std::cout << ">> Insert() works\n";
 		
-		std::cout << std::endl;
-		/// Testing Search
-		name_3 = "CJ";
-		name_4 = "Wander";
-		std::cout << ">>> Search: " << name_3 << ", " << name_4 << " and " << name_1 << " (Was removed).\n>>> Searching...\n";
-		assert(myList.search(681617, name_3));
-		assert(myList.search(554988, name_4));
-		assert(myList.search(121684, name_1) == false);	//!< Was removed
-		std::cout << ">> Passed!\n";
+		// Testing Remove
+		myList.remove(645, name1);
+		myList.remove(147, name2);
+		std::cout << "Removed: " << name1 << " and " << name2 << ".\n";
+		assert(name1 == "Aloi");
+		assert(name2 == "Ezio");
+		std::cout << "Passed!\n";
+		std::cout << myList << "\n";
+		
+		// Testing Search
+		std::cout << "Searching for key '1'...\n";
+		assert(myList.search(1, name1));
+		std::cout << "Recovered from search: " << name1 << "\n";
+		assert(myList.search(147, name2) == false);	//Removed
+		std::cout << "Passed!\n";
 
 		std::cout << std::endl;
 		/// Testing Min and Max
-		std::cout << ">>> Max and Min:\n>>> Searching...\n";
-		assert(myList.min() == 1);
-		assert(myList.max() == 984613);
-		std::cout << ">> Passed!\n";
+		std::cout << "Testing max() and min():\n";
+		myList.search(myList.min(), name1);
+		myList.search(myList.max(), name2);
+		std::cout << "Info in min(): " << name1 << " Info in max(): " << name2 << "\n";
+		assert(name1 == "Mordekaizer");
+		assert(name2 == "Leroy Jenkins");
+		std::cout << "Passed!\n";
 
 		std::cout << std::endl;
 		/// Testing Predecessor and Sucessor
-		std::cout << "Predecessor and Sucessor: " << name_3 << ".\n>>> Searching...\n";
-		int pred, suce;
-		assert(myList.predecessor(681617, pred));
-		assert(myList.sucessor(681617, suce));
-		assert(pred == 554988);
-		assert(suce == 879853);
-		std::cout << ">> Passed!\n";
+		std::cout << "Testing Predecessor and Sucessor of key '23': \n";
+		int prd, scs;
+		assert(myList.predecessor(23, prd));
+		assert(myList.sucessor(23, scs));
+		std::cout << "Predecessor: " << prd << "\n";
+		std::cout << "Sucessor: " << scs << "\n";
+		assert(prd == 1);
+		assert(scs == 9999999);
+		std::cout << "Passed!\n";
 
-		std::cout << "      =====================================================================================\n";
+		std::cout << "\n\n\n";
 
 	}
 
